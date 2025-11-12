@@ -1,0 +1,47 @@
+services:
+
+  server:
+    container_name: app-backend
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8000" 
+    command: uv run python manage.py runserver 0.0.0.0:8000
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend/uv.lock
+    volumes:
+      - ./backend/src:/backend
+      - ./backend/tests:/backend/tests
+      - ./backend/.env:/backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      
+  db:
+    container_name: app-postgres
+    platform: linux/amd64
+    image: postgres:16
+    env_file:
+      - ./backend/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app || exit 1"]
+      interval: 10s
+      retries: 3
+      start_period: 10s
+      timeout: 3s
+
+volumes:
+    postgres_data:
+
+  
+  
