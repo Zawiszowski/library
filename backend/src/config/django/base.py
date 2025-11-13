@@ -30,7 +30,11 @@ DEBUG = False
 ALLOWED_HOSTS = []
 
 
-LOCAL_APPS = ["library.apps.LibraryConfig", "users.apps.LibraryUsersConfig"]
+LOCAL_APPS = [
+    "library.apps.LibraryConfig",
+    "users.apps.LibraryUsersConfig",
+    "api.apps.ApiConfig",
+]
 
 THIRD_PART_APPS = ["rest_framework", "drf_spectacular"]
 
