@@ -80,9 +80,8 @@ class BookUpdateStateSerializer(serializers.Serializer):
 
     user_id = serializers.RegexField(
         regex=r"^\d{6}$",
-        max_length=6,
-        min_length=6,
-        required=True,
+        required=False,
+        allow_null=True,
         help_text="6-digit user id",
     )
 
@@ -131,7 +130,7 @@ class BookUpdateStateAPIView(GenericAPIView):
 
     @extend_schema(
         summary="Update book state",
-        description="Set state of book on borrowed or free.",
+        description="Set state of book on BORROWED or FREE. To change status to FREE pass null to user",
         request=BookUpdateStateSerializer,
         responses={
             200: LibrarySerializer,
@@ -146,17 +145,9 @@ class BookUpdateStateAPIView(GenericAPIView):
         user_id = serializer.validated_data.get("user_id")
 
         try:
-            Book.objects.get(library_code=library_code)
+            book = update_book_state(library_code, user_id)
         except Book.DoesNotExist:
             return Response({"detail": "Book not found."}, status=404)
-
-        if user_id is not None:
-            try:
-                LibraryUser.objects.get(pk=user_id)
-            except LibraryUser.DoesNotExist:
-                return Response({"detail": "User not found."}, status=404)
-
-        book = update_book_state(library_code, user_id)
 
         return Response(LibrarySerializer(book).data, status=200)
 

@@ -8,9 +8,9 @@ from users.models import LibraryUser
 def update_book_state(id: str, user_id: str | None = None) -> Book:
     with transaction.atomic():
         book = Book.objects.get(library_code=id)
-        user_id = LibraryUser.objects.get(id=user_id)
 
         if user_id:
+            user_id = LibraryUser.objects.get(id=user_id)
             book.user = user_id
             book.state = BookState.BORROWED
             book.borrowed_since = timezone.now()
