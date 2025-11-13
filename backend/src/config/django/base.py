@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 
 LOCAL_APPS = ["library.apps.LibraryConfig", "users.apps.LibraryUsersConfig"]
 
+THIRD_PART_APPS = ["rest_framework", "drf_spectacular"]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     *LOCAL_APPS,
+    *THIRD_PART_APPS,
 ]
 
 MIDDLEWARE = [
@@ -130,3 +133,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+from config.settings.drf import *  # noqa: E402, F403, I001
+from config.settings.spectacular import *  # noqa: E402, F403, I001
