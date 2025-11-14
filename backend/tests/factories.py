@@ -1,7 +1,7 @@
 import factory
 from datetime import datetime
 
-from src.library.models import BookState
+from library.models import BookState
 
 
 def random_datetime() -> datetime:
@@ -10,17 +10,23 @@ def random_datetime() -> datetime:
 
 class UserFactory(factory.django.DjangoModelFactory):
     id = factory.Sequence(lambda x: f"{x:06d}")
-    name = factory.Faker("first name")
-    surename = factory.Faker("surename")
+    name = factory.Faker("first_name")
+    surename = factory.Faker("last_name")
+
+    class Meta:
+        model = "users.LibraryUser"
 
 
 class AuthorFactory(factory.django.DjangoModelFactory):
     id = factory.Sequence(int)
-    name = factory.Faker("first name")
-    surename = factory.Faker("surename")
+    name = factory.Faker("first_name")
+    surename = factory.Faker("last_name")
+
+    class Meta:
+        model = "library.Author"
 
 
-class LibraryFacroty(factory.django.DjangoModelFactory):
+class LibraryFactory(factory.django.DjangoModelFactory):
     id = factory.Sequence(int)
     library_code = factory.Sequence(lambda x: f"{x:06d}")
     title = factory.faker.Faker("sequence", nb_words=4)
@@ -28,3 +34,6 @@ class LibraryFacroty(factory.django.DjangoModelFactory):
     user = factory.SubFactory("tests.factories.UserFactory")
     state = factory.Iterator(BookState.values)
     borrowed_since = factory.LazyFunction(random_datetime)
+
+    class Meta:
+        model = "library.Book"
