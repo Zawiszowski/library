@@ -16,5 +16,14 @@ dependencies = [
 dev = [
     "factory-boy>=3.3.3",
     "pytest>=9.0.1",
+    "pytest-django>=4.11.1",
     "ruff>=0.14.4",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.django.local"
+python_files = [
+    "tests.py",
+    "test_*.py",
+    "*_tests.py",
 ]
