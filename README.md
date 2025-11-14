@@ -1,5 +1,11 @@
 # Init documentation
 
+## Create env from template:
+    cp backend/.env.template backend/.env
+
+## Configure your .env
+    add your SECRET_KEY, POSTGRES_USER and POSTGRES_PASSWORD
+
 ## To run app
     docker compose up
 
